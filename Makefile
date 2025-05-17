@@ -64,7 +64,7 @@ frm:
 	rm -f mini_output bash_output
 
 git: fclean 
-	git add . && git commit -m $(MSG) && git push || echo "Usage: make git MSG=\"msg\""
+	git add . && git commit -m $(M) && git push && echo "Push done" || echo "Usage: make git M=\"msg\""
 
 re: fclean all
 
