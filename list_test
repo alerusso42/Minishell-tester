@@ -1,0 +1,7 @@
+#Commento
+
+ls
+ls -R
+echod ciao
+echo $?
+EOT
