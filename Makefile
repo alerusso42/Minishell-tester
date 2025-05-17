@@ -61,7 +61,7 @@ deb:
 
 frm: 
 	rm -f *.txt *.gdb *.supp
-	rm mini_output bash_output
+	rm -f mini_output bash_output
 
 git: fclean 
 	git add . && git commit -m $(MSG) && git push || echo "Usage: make git MSG=\"msg\""
