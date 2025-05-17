@@ -70,3 +70,5 @@ re: fclean all
 
 #–– phony targets
 .PHONY: all clean fclean re
+
+.SILENT:

@@ -1,6 +1,4 @@
-#define ALE_PATH "../minishell-ale"
-#define SAMU_PATH "../minishell-samu"
-#define MINI_PATH "/nfs/homes/alerusso/Desktop/Minishell-superpippo/minishell"
+#define MINI_PATH "../minishell"
 #define BASH_PATH "/bin/bash"
 #define TEST_FILE "list_test"
 #define SCRIPT_FILE "script.sh"
@@ -15,7 +13,7 @@ typedef struct s_tester
 	int				bash_output;
 	int				mini_output;
 	unsigned char	exits;
-}t_tester;
+}			t_tester;
 
 enum which
 {
@@ -25,13 +23,13 @@ enum which
 
 int		get_test_lines(t_tester *data);
 void	redir_input(t_tester *data, bool which);
-//int		exec_test(t_tester *data, bool which);
+// int		exec_test(t_tester *data, bool which);
 int		exec_test(bool which);
 
 int		exec_test(bool which)
 {
 	char	**argv = {NULL};
-	unsigned char	n;
+	// unsigned char	n;
 	int		exit_code;
 	pid_t	pid;
 
@@ -42,7 +40,7 @@ int		exec_test(bool which)
 	{
 		if (which == MINI)
 		{
-			execve(SAMU_PATH, argv, __environ);
+			execve(MINI_PATH, argv, __environ);
 		}
 		else if (which == BASH)
 		{
@@ -51,8 +49,8 @@ int		exec_test(bool which)
 		exit(1);
 	}
 	wait(&exit_code);
-	n = (unsigned char)exit_code;
-	l_printf("exit: %d\n\n", n);
+	// n = (unsigned char)exit_code;
+	// l_printf("exit: %d\n\n", n);
 	return (0);
 }
 
@@ -95,8 +93,8 @@ int	get_test_lines(t_tester *data)
 		if (ft_strncmp(line, "EOT", 3) == 0)
 		{
 			free(line);
-			//line = ft_strdup("exit\n");
-			//ft_putstr_fd(line, data->script);
+			line = ft_strdup("exit\n");
+			ft_putstr_fd(line, data->script);
 			break ;
 		}
 		if (line[0] == '#' || line[0] == '\n')
@@ -107,7 +105,7 @@ int	get_test_lines(t_tester *data)
 		else
 		{
 			ft_putstr_fd(line, data->script);
-			//fd_printf(data->script, "echo $?\n");
+			fd_printf(data->script, "echo $?\n");
 			free(line);
 			line = gnl(data->test_list);
 		}
