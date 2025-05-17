@@ -1,6 +1,9 @@
-#define MINI_PATH "../minishell"
+#define ALE_PATH "../minishell-ale"
+#define SAMU_PATH "../minishell-samu"
+#define MINI_PATH "/nfs/homes/alerusso/Desktop/Minishell-superpippo/minishell"
 #define BASH_PATH "/bin/bash"
 #define TEST_FILE "list_test"
+#define SCRIPT_FILE "script.sh"
 #include <stdbool.h>
 #include <sys/wait.h>
 #include "Libft/all.h"
@@ -28,7 +31,7 @@ int		exec_test(bool which);
 int		exec_test(bool which)
 {
 	char	**argv = {NULL};
-	//char	*num;
+	unsigned char	n;
 	int		exit_code;
 	pid_t	pid;
 
@@ -39,7 +42,7 @@ int		exec_test(bool which)
 	{
 		if (which == MINI)
 		{
-			execve(MINI_PATH, argv, __environ);
+			execve(SAMU_PATH, argv, __environ);
 		}
 		else if (which == BASH)
 		{
@@ -48,15 +51,17 @@ int		exec_test(bool which)
 		exit(1);
 	}
 	wait(&exit_code);
-	/*data->exits = exit_code;
-	num = ft_itoa((int)data->exits);
-	ft_putstr_fd(num, 1);
-	ft_putstr_fd("\n", 1);*/
+	n = (unsigned char)exit_code;
+	l_printf("exit: %d\n\n", n);
 	return (0);
 }
 
 void	redir_input(t_tester *data, bool which)
 {
+	// close(data->script);
+	data->script = open(SCRIPT_FILE, O_RDONLY);
+	if (data->script < 0)
+		printf("gaygaygay");
 	dup2(data->script, STDIN_FILENO);
 	if (which == MINI)
 	{
@@ -90,8 +95,8 @@ int	get_test_lines(t_tester *data)
 		if (ft_strncmp(line, "EOT", 3) == 0)
 		{
 			free(line);
-			line = ft_strdup("exit $?\n");
-			ft_putstr_fd(line, data->script);
+			//line = ft_strdup("exit\n");
+			//ft_putstr_fd(line, data->script);
 			break ;
 		}
 		if (line[0] == '#' || line[0] == '\n')
@@ -102,7 +107,7 @@ int	get_test_lines(t_tester *data)
 		else
 		{
 			ft_putstr_fd(line, data->script);
-			fd_printf(data->script, "echo Exit code of command: $?\n", line);
+			//fd_printf(data->script, "echo $?\n");
 			free(line);
 			line = gnl(data->test_list);
 		}
@@ -127,20 +132,20 @@ int	main(int argc, char *argv[], char *env[])
 		data.test_list = open(argv[1], O_RDONLY);
 	else
 		data.test_list = open(TEST_FILE, O_RDONLY);
-	printf("fd %d\n", data.test_list);
 	if (data.test_list < 0)
 	{
 		if (argv[1])
-			return (printf("\nCannot open |%s|\n", argv[1]));
+			return (fd_printf(2, "\nCannot open |%s|\n", argv[1]));
 		else
-			return (printf("\nCannot open |%s|\n", argv[1]));
+			return (fd_printf(2, "\nCannot open |%s|\n", argv[1]));
 	}
-	data.mini_output = open("mini_output", O_RDWR | O_CREAT | O_APPEND, 0777);
-	data.bash_output = open("bash_output", O_RDWR | O_CREAT | O_APPEND, 0777);
-	while (get_test_lines(&data) == 0)
+	data.mini_output = open("mini_output", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	data.bash_output = open("bash_output", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	while (get_test_lines(&data) == 0) // scriviamo su script.sh 
 	{
 		redir_input(&data, BASH);
 		exec_test(BASH);
+		close(data.script);
 		redir_input(&data, MINI);
 		exec_test(MINI);
 	}

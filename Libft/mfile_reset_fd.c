@@ -6,7 +6,7 @@
 /*   By: alerusso <alerusso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:41:16 by alerusso          #+#    #+#             */
-/*   Updated: 2025/02/21 10:43:48 by alerusso         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:43:33 by alerusso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	reset_fd(int fd, char *name)
 	int	old_fd;
 
 	get_next_line(fd, RESET);
-	close(fd);
 	old_fd = fd;
+	close(fd);
 	fd = open(name, O_RDWR);
 	if (fd == -1)
 		return (1);
