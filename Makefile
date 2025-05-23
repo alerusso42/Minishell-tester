@@ -16,7 +16,7 @@ SUPP_FILE = $(shell pwd)/supp.supp
 
 #–– All source files, with their relative paths
 SRCS = \
-  main.c \
+  srcs/main.c \
 
 #–– Object files go under obj/, mirroring the tree
 OBJ_DIR = obj
@@ -31,6 +31,7 @@ $(NAME): $(LIBFT) $(OBJS)
 
 #–– Build libft (bonus) before anything else
 $(LIBFT): 
+	@echo compiling Libft...
 	$(MAKE) all -C $(LIBFT_DIR)
 
 #–– Single pattern rule for every .c → .o
@@ -70,5 +71,3 @@ re: fclean all
 
 #–– phony targets
 .PHONY: all clean fclean re
-
-.SILENT:

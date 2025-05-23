@@ -71,3 +71,4 @@ re: fclean all
 
 
 .PHONY: all clean fclean re piscine other mfile
+.SILENT: 
