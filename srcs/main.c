@@ -5,6 +5,12 @@ void	redir_input(t_tester *data, bool which);
 //int		exec_test(t_tester *data, bool which);
 int		exec_test(bool which);
 
+/*
+void	rm_readline_prompt(t_tester *data)
+{
+	
+}*/
+
 int		exec_test(bool which)
 {
 	char	**argv = {NULL};
@@ -29,16 +35,15 @@ int		exec_test(bool which)
 	}
 	wait(&exit_code);
 	n = (unsigned char)exit_code;
-	l_printf("exit: %d\n\n", n);
+	l_printf("\nexit: %d\n\n", n);
 	return (0);
 }
 
 void	redir_input(t_tester *data, bool which)
 {
-	// close(data->script);
 	data->script = open(SCRIPT_FILE, O_RDONLY);
 	if (data->script < 0)
-		printf("gaygaygay");
+		perror("open");
 	dup2(data->script, STDIN_FILENO);
 	if (which == MINI)
 	{
@@ -127,6 +132,8 @@ int	main(int argc, char *argv[], char *env[])
 		else
 			return (fd_printf(2, "\nCannot open |%s|\n", argv[1]));
 	}
+	data.stdinput = dup(STDIN_FILENO);
+	data.stdoutput = dup(STDOUT_FILENO);
 	data.mini_output = open(MINI_OUT, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	data.bash_output = open(BASH_OUT, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (!data.mini_output || !data.bash_output)
@@ -138,10 +145,14 @@ int	main(int argc, char *argv[], char *env[])
 	{
 		redir_input(&data, BASH);
 		exec_test(BASH);
+		system("sed -Ei '/total/d' bash_output");
 		close(data.script);
 		redir_input(&data, MINI);
 		exec_test(MINI);
+		system("sed -Ei '/total/d' mini_output");
 	}
+	close(data.stdinput);
+	close(data.stdoutput);
 	close(data.test_list);
 	close(data.script);
 }

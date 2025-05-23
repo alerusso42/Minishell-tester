@@ -1,5 +1,5 @@
 #Commento
 
-ls -l
-ls
+echo ciao
+echo ciao ciao
 EOT

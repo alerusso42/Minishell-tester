@@ -1,6 +1,5 @@
-#define ALE_PATH "../minishell-ale"
-#define SAMU_PATH "../minishell-samu"
-#define MINI_PATH "/nfs/homes/alerusso/Desktop/Minishell-superpippo/minishell"
+
+#define MINI_PATH "../minishell"
 #define BASH_PATH "/bin/bash"
 #define TEST_FILE "list_test"
 #define SCRIPT_FILE "script.sh"
@@ -16,6 +15,8 @@ typedef struct s_tester
 	int				script;
 	int				bash_output;
 	int				mini_output;
+	int				stdinput;
+	int				stdoutput;
 	unsigned char	exits;
 }t_tester;
 

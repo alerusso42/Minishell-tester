@@ -1,5 +1,2 @@
-ls -l
-echo $?
-ls
-echo $?
-exit
+echo ciao
+echo ciao ciao
